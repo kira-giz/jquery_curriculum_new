@@ -22,7 +22,7 @@
     <script src="../../common/js/jquery.js"></script>
     <script>
       // 今回やるのはモーダルです。
-      $(function(){
+      /* $(function(){
         // .modal-show をクリックすることで .modal をfadeInさせる。
         const modal = $('.modal');
         const modalShow = $('.modal-show');
@@ -34,10 +34,65 @@
         modalClose.on('click', function(){
           modal.fadeOut();
         });
-      })
+      }) */
       // .click() クリック時のイベントを登録する。
       // .fadeIn() 一定時間かけてフェードインする。
       // .fadeOut() 一定時間かけてフェードアウトする。
+      function Modal() {
+        this.$modal = $('.modal');
+        this.$modalShow = $('.modal-show');
+        this.$modalClose = $('.modal-close');
+        // 定数はすべて大文字
+        this.ANIMATE_TIME = 500;
+        // thisをmodalでバインド
+        this.bind();
+      };
+      // DOMイベントの束縛
+      // bind(this)によってthis.show内でModalを参照できるようにしている
+      Modal.prototype.bind = function() {
+        this.$modalShow.on('click', this.show.bind(this));
+        this.$modalClose.on('click', this.hide.bind(this));
+      };
+      // show / hide　イベントを登録している
+      Modal.prototype.show = function() {
+        this.$modal.fadeIn(this.ANIMATE_TIME);
+      };
+      Modal.prototype.hide = function() {
+        this.$modal.fadeOut(this.ANIMATE_TIME);
+      };
+      // Modalがインスタンス化しないとDOMを取得しないためここで実行
+      $(function() {
+        const modal = new Modal();
+      });
+
+      // クラス
+      class Modal {
+        constructor() {
+          this.$modal = $('.modal');
+          this.$modalShow = $('.modal-show');
+          this.$modalClose = $('.modal-close');
+          // 定数はすべて大文字
+          this.ANIMATE_TIME = 500;
+          this.bind();
+        }
+
+        bind() {
+          this.$modalShow.on('click', this.show.bind(this));
+          this.$modalClose.on('click', this.hide.bind(this));
+        }
+
+        show() {
+          this.$modal.fadeIn(this.ANIMATE_TIME);
+        }
+        hide() {
+          this.$modal.fadeOut(this.ANIMATE_TIME);
+        }
+      }
+
+      $(function() {
+        const modal = new Modal();
+      });
+
     </script>
   </body>
 </html>
