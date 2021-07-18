@@ -26,6 +26,75 @@
       // .keyup() 文字入力後に発火されるイベントです。
       // .replace(/\s+/g,'').length 改行を含まない文字数を取得します。
       // .val() input要素のvalueを取得します。
+
+      /*
+      const $input = $('.input');
+      let $restCount = $('.rest-count');
+      const MAX_LETTERS = 30;
+
+      $input.on('keyup', function(){
+        let value = $(this).val();
+        let strLength = value.replace(/\s+/g,'').length;
+        if(MAX_LETTERS > strLength) {
+          $restCount.removeClass('red');
+        } else {
+          $restCount.addClass('red');
+        }
+        $restCount.text(MAX_LETTERS - strLength);
+      });
+      */
+
+      //オブジェクト
+      function Count() {
+        this.$input = $('.input');
+        this.$restCount = $('.rest-count');
+        this.MAX_LETTERS = 30;
+        this.bind();
+      };
+
+      Count.prototype.bind = function() {
+        this.$input.on('keyup', this.check.bind(this));
+      };
+
+      Count.prototype.check = function(event) {
+        let value = $(event.target).val();
+        let strLength = value.replace(/\s+/g,'').length;
+        if(this.MAX_LETTERS > strLength) {
+          this.$restCount.removeClass('red');
+        } else {
+          this.$restCount.addClass('red');
+        }
+        this.$restCount.text(this.MAX_LETTERS - strLength);
+      };
+
+      //クラス
+      class Count {
+        constructor(){
+          this.$input = $('.input');
+          this.$restCount = $('.rest-count');
+          this.MAX_LETTERS = 30;
+        };
+
+        bind() {
+          this.$input.on('keyup', this.check.bind(this));
+        };
+
+        check(event) {
+          let value = $(event.target).val();
+          let strLength = value.replace(/\s+/g,'').length;
+          if(this.MAX_LETTERS > strLength) {
+            this.$restCount.removeClass('red');
+          } else {
+            this.$restCount.addClass('red');
+          }
+          this.$restCount.text(this.MAX_LETTERS - strLength);
+        };
+      };
+
+      $(function(){
+        const count = new Count();
+      });
+
     </script>
   </body>
 </html>
