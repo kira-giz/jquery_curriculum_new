@@ -22,22 +22,27 @@
     <script src="../../common/js/jquery.js"></script>
     <script>
       // 今回やるのはモーダルです。
-      /* $(function(){
+      // htmlが読み込まれる前に発動するのを防ぐ
+
+      $(function(){
+        var modal = $('.modal');
+        var modalShow = $('.modal-show');
+        var modalClose = $('.modal-close');
         // .modal-show をクリックすることで .modal をfadeInさせる。
-        const modal = $('.modal');
-        const modalShow = $('.modal-show');
-        modalShow.on('click', function(){
-          modal.fadeIn();
-        });
+        modalShow.click(function(){
+          modal.fadeIn(300);
+        })
         // .modal-close をクリックで .modal をfadeOutさせる。
-        const modalClose = $('.modal-close');
         modalClose.on('click', function(){
-          modal.fadeOut();
+          modal.fadeOut(300);
         });
-      }) */
+      });
       // .click() クリック時のイベントを登録する。
       // .fadeIn() 一定時間かけてフェードインする。
       // .fadeOut() 一定時間かけてフェードアウトする。
+
+      /*
+      // オブジェクト
       function Modal() {
         this.$modal = $('.modal');
         this.$modalShow = $('.modal-show');
@@ -45,11 +50,10 @@
         // 定数はすべて大文字
         this.ANIMATE_TIME = 500;
         // thisをmodalでバインド
-        this.bind();
+        this.bindModal();
       };
       // DOMイベントの束縛
-      // bind(this)によってthis.show内でModalを参照できるようにしている
-      Modal.prototype.bind = function() {
+      Modal.prototype.bindModal = function() {
         this.$modalShow.on('click', this.show.bind(this));
         this.$modalClose.on('click', this.hide.bind(this));
       };
@@ -65,6 +69,7 @@
         const modal = new Modal();
       });
 
+      /*
       // クラス
       class Modal {
         constructor() {
@@ -73,10 +78,10 @@
           this.$modalClose = $('.modal-close');
           // 定数はすべて大文字
           this.ANIMATE_TIME = 500;
-          this.bind();
+          this.bindModal();
         }
 
-        bind() {
+        bindModal() {
           this.$modalShow.on('click', this.show.bind(this));
           this.$modalClose.on('click', this.hide.bind(this));
         }
@@ -87,11 +92,12 @@
         hide() {
           this.$modal.fadeOut(this.ANIMATE_TIME);
         }
-      }
+      };
 
       $(function() {
-        const modal = new Modal();
+        var modal = new Modal();
       });
+      */
 
     </script>
   </body>
