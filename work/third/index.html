@@ -31,38 +31,43 @@
       // .addClass() クラスを追加します。
       // .removeClass() クラスを削除します。
 
-      /*
       $(function(){
-        $('.nav').find('li').on('click', function(){
-          let i = $(this).index();
-          $('.contents').find('li').addClass('is-hidden').eq(i).removeClass('is-hidden');
-        })
+        var navItem = $('.nav').children('li');
+        var contentsItem = $('.contents').children('li');
+        function tabToggle(e){
+          var $target = $(e.target);
+          var i = $target.index();
+          contentsItem
+            .addClass('is-hidden')
+            .eq(i).
+            removeClass('is-hidden');
+        };
+        navItem.on('click', tabToggle);
       });
-      */
 
+      /*
       //オブジェクト
       function Tab() {
-        this.$navItem = $('.nav').find('li');
-        this.$contentsItem = $('.contents').find('li');
+        this.$navItem = $('.nav').children('li');
+        this.$contentsItem = $('.contents').children('li');
         this.bind();
       };
 
-      // 1.navItemからindexを取得
-      // 2.文章からクラスを付けて消す
-      // 3.文章から取得したインデックスと同じ要素を抽出
       Tab.prototype.bind = function() {
         this.$navItem.on('click', this.targetContentsShow.bind(this));
       };
 
-      Tab.prototype.targetContentsShow = function(event) {
-        let target = $(event.target);
-        let index = target.index();
+      Tab.prototype.targetContentsShow = function(e) {
+        let $target = $(e.target);
+        let i = $target.index();
         this.$contentsItem
           .addClass('is-hidden')
-          .eq(index)
+          .eq(i)
           .removeClass('is-hidden');
       };
+      */
 
+      /*
       //クラス
       class Tab {
         constructor(){
@@ -76,17 +81,21 @@
         };
 
         targetContentsShow(event) {
-          let target = $(event.target);
-          let index = target.index();
+          let $target = $(event.target);
+          let i = $target.index();
           this.$contentsItem
             .addClass('is-hidden')
-            .eq(index)
+            .eq(i)
             .removeClass('is-hidden');
         };
       };
+      */
+
+      /*
       $(function(){
         var tab = new Tab();
       });
+      */
     </script>
   </body>
 </html>
