@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <title>jQuery</title>
+    <title>jQuery Ajax</title>
     <link rel="stylesheet" href="../../common/css/reset.css">
     <link rel="stylesheet" href="../../common/css/base.css">
     <link rel="stylesheet" href="./css/style.css">
@@ -87,18 +87,20 @@
       //     <a class="btn-item" data-js="page-next" href="">次へ</a>
       //   </div>
       // </div>
-      $(function() {
-        const $searchBtn = $('.search__btn');
 
-        $searchBtn.on('click', function(){
-          let $searchText = $('.search__text__input').val();
+      $(function() {
+        var $searchBtn = $('.search__btn');
+
+        $searchBtn.on('click', function(e){
+          e.preventDefault();
+          var $searchText = $('.search__text__input').val();
 
           $.ajax({
             url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
             type: 'GET',
             datatype: 'json',
             data: {
-              applicationId: 1031111983337341334,
+              applicationId: appId,
               booksGenreId: '001',
               keyword: $searchText,
             },
@@ -106,8 +108,8 @@
           .done(function(data){
             console.log(data);
           })
-          .fail(function(error){
-            console.log(error);
+          .fail(function(data){
+            console.log(data);
           });
         });
       });
