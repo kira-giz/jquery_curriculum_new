@@ -81,22 +81,22 @@
       /*
       // オブジェクト
         function Drop() {
-          this.hoverElem = $('.menu__list__title');
-          this.downMenu = $('.menu__list__childList');
+          this.$hoverElem = $('.menu__list__title');
+          this.$downMenu = $('.menu__list__childList');
           this.bindDrop();
         };
 
         Drop.prototype.bindDrop = function() {
-          this.hoverElem.hover(this.menuDown.bind(this), this.menuUp.bind(this));
+          this.$hoverElem.hover(this.menuDown.bind(this), this.menuUp.bind(this));
         };
 
         Drop.prototype.menuDown = function(e) {
-          var $nextTarget = $(e.target).siblings(this.downMenu);
+          var $nextTarget = $(e.target).siblings(this.$downMenu);
           $nextTarget.stop().slideDown();
         };
 
         Drop.prototype.menuUp = function(e) {
-          var $nextTarget = $(e.target).siblings(this.downMenu);
+          var $nextTarget = $(e.target).siblings(this.$downMenu);
           $nextTarget.stop().slideUp();
         };
         */
@@ -105,22 +105,22 @@
         // クラス
         class Drop {
           constructor() {
-            this.hoverElem = $('.menu__list__title');
-            this.downMenu = $('.menu__list__childList');
+            this.$hoverElem = $('.menu__list__title');
+            this.$downMenu = $('.menu__list__childList');
             this.bindDrop();
           };
 
           bindDrop() {
-            this.hoverElem.hover(this.menuDown.bind(this), this.menuUp.bind(this));
+            this.$hoverElem.hover(this.menuDown.bind(this), this.menuUp.bind(this));
           };
 
           menuDown(e) {
-            var $nextTarget = $(e.target).siblings(this.downMenu);
+            var $nextTarget = $(e.target).siblings(this.$downMenu);
             $nextTarget.stop().slideDown();
           };
 
           menuUp(e) {
-            var $nextTarget = $(e.target).siblings(this.downMenu);
+            var $nextTarget = $(e.target).siblings(this.$downMenu);
             $nextTarget.stop().slideUp();
           };
         }
