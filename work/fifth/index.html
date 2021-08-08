@@ -97,12 +97,14 @@
       // .data('') DOM要素にあるdata-~を取得できる
       // .change() セレクトボックスの値の変更をキャッチする関数
       // $().each() DOM要素を1つずつループ処理をする（ループ内で$(this)を使うと要素がひとつずつ取得できる）
+
+      /*
       $(function(){
         var $selectBox = $('.select');
         var $categoryList = $('.list li');
-        $selectBox.change(function(){
+        $selectBox.change(function() {
           var value = $(this).val();
-          $categoryList.each(function(){
+          $categoryList.each(function() {
             var listData = $(this).data('category-type');
             if(value == listData) {
               $(this).show();
@@ -113,6 +115,66 @@
             };
           });
         });
+      });
+      */
+
+      /*
+      // オブジェクト
+      function Sort() {
+        this.$selectBox = $('.select');
+        this.$categoryList = $('.list li');
+        this.bindSort();
+      };
+
+      Sort.prototype.bindSort = function() {
+        this.$selectBox.on('change', this.listToggle.bind(this));
+      };
+
+      Sort.prototype.listToggle = function(e) {
+        var value = $(e.target).val();
+        this.$categoryList.each(function() {
+          var listData = $(this).data('category-type');
+            if(value == listData) {
+              $(this).show();
+            } else if(value == 'all') {
+              $(this).show();
+            } else {
+              $(this).hide();
+            };
+        });
+      };
+      */
+
+      // クラス
+      class Sort {
+        constructor() {
+          this.$selectBox = $('.select');
+          this.$categoryList = $('.list li');
+          this.bindSort();
+        };
+
+        bindSort() {
+          this.$selectBox.on('change', this.listToggle.bind(this));
+        };
+
+        listToggle(e) {
+          var value = $(e.target).val();
+          this.$categoryList.each(function() {
+            var listData = $(this).data('category-type');
+              if(value == listData) {
+                $(this).show();
+              } else if(value == 'all') {
+                $(this).show();
+              } else {
+                $(this).hide();
+              };
+          });
+        }
+      }
+
+
+      $(function() {
+        var sort = new Sort();
       });
 
     </script>
