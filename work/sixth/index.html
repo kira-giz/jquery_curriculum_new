@@ -28,13 +28,13 @@
       // .val() input要素のvalueを取得します。
 
       /*
-      const $input = $('.input');
-      let $restCount = $('.rest-count');
-      const MAX_LETTERS = 30;
+      var $input = $('.input');
+      var $restCount = $('.rest-count');
+      var MAX_LETTERS = 30;
 
       $input.on('keyup', function(){
-        let value = $(this).val();
-        let strLength = value.replace(/\s+/g,'').length;
+        var value = $(this).val();
+        var strLength = value.replace(/\s+/g,'').length;
         if(MAX_LETTERS > strLength) {
           $restCount.removeClass('red');
         } else {
