@@ -32,17 +32,17 @@
       // .removeClass() クラスを削除します。
 
       $(function(){
-        var navItem = $('.nav').children('li');
-        var contentsItem = $('.contents').children('li');
+        var $navItem = $('.nav').children('li');
+        var $contentsItem = $('.contents').children('li');
         function tabToggle(e){
           var $target = $(e.target);
           var i = $target.index();
-          contentsItem
+          $contentsItem
             .addClass('is-hidden')
             .eq(i)
             .removeClass('is-hidden');
         };
-        navItem.on('click', tabToggle);
+        $navItem.on('click', tabToggle);
       });
 
       /*
