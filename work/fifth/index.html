@@ -98,19 +98,21 @@
       // .change() セレクトボックスの値の変更をキャッチする関数
       // $().each() DOM要素を1つずつループ処理をする（ループ内で$(this)を使うと要素がひとつずつ取得できる）
       $(function(){
-        $('.select').change(function(){
-          let value = $(this).val();
-          $('.list li').each(function(){
-            let listData = $(this).data('category-type');
+        var $selectBox = $('.select');
+        var $categoryList = $('.list li');
+        $selectBox.change(function(){
+          var value = $(this).val();
+          $categoryList.each(function(){
+            var listData = $(this).data('category-type');
             if(value == listData) {
               $(this).show();
             } else if(value == 'all') {
               $(this).show();
             } else {
               $(this).hide();
-            }
-          })
-        })
+            };
+          });
+        });
       });
 
     </script>
