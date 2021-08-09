@@ -58,7 +58,6 @@
       // .stop() 現在動作中のアニメーション処理を全て中止します。
 
       $(function(){
-        // 変数前の$はjQueryオブジェクトであることを明示するため
         // stop → 入れない場合、ホバーした分だけアニメーションが起動する
         // stop → 入れた場合、起動しているアニメーションが全てストップする
         // 今回は何回も連続でホバーした時ホバーされた分だけスライドダウンアップを繰り返してしまうのと、ホバーを途中で外しても必ず最後まで降りるのを抑制するため
@@ -75,7 +74,11 @@
           var $nextTarget = $(e.target).siblings($downMenu);
           $nextTarget.stop().slideUp();
         };
-        $hoverElem.hover(menuDown, menuUp);
+        $hoverElem.hover(function(){
+          menuDown();
+        }, function(){
+          menuUp();
+        });
       });
 
       /*
