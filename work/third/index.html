@@ -42,8 +42,8 @@
             .eq(i)
             .removeClass('is-hidden');
         };
-        $navItem.on('click', function(){
-          tabToggle();
+        $navItem.on('click', function(e){
+          tabToggle(e);
         });
       });
 
