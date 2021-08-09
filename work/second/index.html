@@ -30,20 +30,25 @@
       // .fadeOut() 一定時間かけてフェードアウトする。
 
       $(function(){
-        var modal = $('.modal');
-        var modalShow = $('.modal-show');
-        var modalClose = $('.modal-close');
-        function modalFadeIn(){
-          modal.fadeIn();
+        var $modal = $('.modal');
+        var $modalShow = $('.modal-show');
+        var $modalClose = $('.modal-close');
+
+        // 引数をfadeIn
+        function modalFadeIn(item, seconds){
+          item.fadeIn(seconds);
         };
-        function modalFadeOut(){
-          modal.fadeOut();
+
+        // 引数をfadeOut
+        function modalFadeOut(item, seconds){
+          item.fadeOut(seconds);
         };
-        modalShow.on('click', function(){
-          modalFadeIn();
+        
+        $modalShow.on('click', function(){
+          modalFadeIn($modal);
         });
-        modalClose.on('click', function(){
-          modalFadeOut();
+        $modalClose.on('click', function(){
+          modalFadeOut($modal);
         });
       });
 

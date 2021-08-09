@@ -64,20 +64,23 @@
 
         var $hoverElem = $('.menu__list__title');
         var $downMenu = $('.menu__list__childList');
-        function menuDown(e){
+
+        function menuDown(e, elem){
           // var $nextTarget = $(e.target).next();
-          var $nextTarget = $(e.target).siblings($downMenu);
+          var $nextTarget = $(e.target).siblings(elem);
           $nextTarget.stop().slideDown();
         };
-        function menuUp(e){
+
+        function menuUp(e, elem){
           // var $nextTarget = $(e.target).next();
-          var $nextTarget = $(e.target).siblings($downMenu);
+          var $nextTarget = $(e.target).siblings(elem);
           $nextTarget.stop().slideUp();
         };
+        
         $hoverElem.hover(function(e){
-          menuDown(e);
+          menuDown(e, $downMenu);
         }, function(e){
-          menuUp(e);
+          menuUp(e, $downMenu);
         });
       });
 

@@ -34,16 +34,18 @@
       $(function(){
         var $navItem = $('.nav').children('li');
         var $contentsItem = $('.contents').children('li');
-        function tabToggle(e){
-          var $target = $(e.target);
-          var i = $target.index();
-          $contentsItem
+
+        // 引数と同じインデックスを持つ要素のis-hiddenを剥がす関数
+        function tabToggle(e, item){
+          var i = $(e.target).index();
+          item
             .addClass('is-hidden')
             .eq(i)
             .removeClass('is-hidden');
         };
+
         $navItem.on('click', function(e){
-          tabToggle(e);
+          tabToggle(e, $contentsItem);
         });
       });
 
