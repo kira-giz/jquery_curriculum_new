@@ -103,10 +103,12 @@
               applicationId: appId,
               booksGenreId: '001',
               keyword: $searchText,
+              hits: 20,
+              page: 100
             },
           })
           .done(function(data){
-            console.log(data);
+            console.log(data.Items);
           })
           .fail(function(data){
             console.log(data);
