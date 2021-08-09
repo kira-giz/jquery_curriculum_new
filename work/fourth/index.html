@@ -74,10 +74,10 @@
           var $nextTarget = $(e.target).siblings($downMenu);
           $nextTarget.stop().slideUp();
         };
-        $hoverElem.hover(function(){
-          menuDown();
-        }, function(){
-          menuUp();
+        $hoverElem.hover(function(e){
+          menuDown(e);
+        }, function(e){
+          menuUp(e);
         });
       });
 
