@@ -23,29 +23,29 @@
     <script>
       // 今回やるのはモーダルです。
       // htmlが読み込まれる前に発動するのを防ぐ
+      // .modal-show をクリックすることで .modal をfadeInさせる。
+      // .modal-close をクリックで .modal をfadeOutさせる。
+      // .click() クリック時のイベントを登録する。
+      // .fadeIn() 一定時間かけてフェードインする。
+      // .fadeOut() 一定時間かけてフェードアウトする。
 
       $(function(){
         var modal = $('.modal');
         var modalShow = $('.modal-show');
         var modalClose = $('.modal-close');
         function modalFadeIn(){
-          modal.fadeIn(300);
+          modal.fadeIn();
         };
         function modalFadeOut(){
-          modal.fadeOut(300);
+          modal.fadeOut();
         };
-        // .modal-show をクリックすることで .modal をfadeInさせる。
         modalShow.on('click', function(){
           modalFadeIn();
         });
-        // .modal-close をクリックで .modal をfadeOutさせる。
         modalClose.on('click', function(){
           modalFadeOut();
         });
       });
-      // .click() クリック時のイベントを登録する。
-      // .fadeIn() 一定時間かけてフェードインする。
-      // .fadeOut() 一定時間かけてフェードアウトする。
 
       /*
       // オブジェクト
