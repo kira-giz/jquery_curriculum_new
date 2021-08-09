@@ -28,14 +28,16 @@
         var modal = $('.modal');
         var modalShow = $('.modal-show');
         var modalClose = $('.modal-close');
-        // .modal-show をクリックすることで .modal をfadeInさせる。
-        modalShow.click(function(){
+        function modalFadeIn(){
           modal.fadeIn(300);
-        })
-        // .modal-close をクリックで .modal をfadeOutさせる。
-        modalClose.on('click', function(){
+        };
+        function modalFadeOut(){
           modal.fadeOut(300);
-        });
+        };
+        // .modal-show をクリックすることで .modal をfadeInさせる。
+        modalShow.on('click', modalFadeIn);
+        // .modal-close をクリックで .modal をfadeOutさせる。
+        modalClose.on('click', modalFadeOut);
       });
       // .click() クリック時のイベントを登録する。
       // .fadeIn() 一定時間かけてフェードインする。
@@ -68,8 +70,8 @@
       $(function() {
         const modal = new Modal();
       });
-
       /*
+
       // クラス
       class Modal {
         constructor() {
