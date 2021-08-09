@@ -35,9 +35,13 @@
           modal.fadeOut(300);
         };
         // .modal-show をクリックすることで .modal をfadeInさせる。
-        modalShow.on('click', modalFadeIn);
+        modalShow.on('click', function(){
+          modalFadeIn();
+        });
         // .modal-close をクリックで .modal をfadeOutさせる。
-        modalClose.on('click', modalFadeOut);
+        modalClose.on('click', function(){
+          modalFadeOut();
+        });
       });
       // .click() クリック時のイベントを登録する。
       // .fadeIn() 一定時間かけてフェードインする。

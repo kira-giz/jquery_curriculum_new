@@ -42,7 +42,9 @@
             .eq(i)
             .removeClass('is-hidden');
         };
-        $navItem.on('click', tabToggle);
+        $navItem.on('click', function(){
+          tabToggle();
+        });
       });
 
       /*
