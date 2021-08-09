@@ -98,13 +98,13 @@
       // .change() セレクトボックスの値の変更をキャッチする関数
       // $().each() DOM要素を1つずつループ処理をする（ループ内で$(this)を使うと要素がひとつずつ取得できる）
 
-      /*
+      
       $(function(){
         var $selectBox = $('.select');
         var $categoryList = $('.list li');
-        $selectBox.change(function() {
-          var value = $(this).val();
+        function sortCategory(e){
           $categoryList.each(function() {
+            var value = $(e.target).val();
             var listData = $(this).data('category-type');
             if(value == listData) {
               $(this).show();
@@ -114,9 +114,11 @@
               $(this).hide();
             };
           });
+        }
+        $selectBox.change(function(e) {
+          sortCategory(e);
         });
       });
-      */
 
       /*
       // オブジェクト
@@ -127,10 +129,10 @@
       };
 
       Sort.prototype.bindSort = function() {
-        this.$selectBox.on('change', this.listToggle.bind(this));
+        this.$selectBox.on('change', this.categorySort.bind(this));
       };
 
-      Sort.prototype.listToggle = function(e) {
+      Sort.prototype.categorySort = function(e) {
         var value = $(e.target).val();
         this.$categoryList.each(function() {
           var listData = $(this).data('category-type');
@@ -145,6 +147,7 @@
       };
       */
 
+      /*
       // クラス
       class Sort {
         constructor() {
@@ -154,10 +157,10 @@
         };
 
         bindSort() {
-          this.$selectBox.on('change', this.listToggle.bind(this));
+          this.$selectBox.on('change', this.categorySort.bind(this));
         };
 
-        listToggle(e) {
+        categorySort(e) {
           var value = $(e.target).val();
           this.$categoryList.each(function() {
             var listData = $(this).data('category-type');
@@ -172,10 +175,10 @@
         }
       }
 
-
       $(function() {
         var sort = new Sort();
       });
+      */
 
     </script>
   </body>
