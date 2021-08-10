@@ -88,12 +88,14 @@
       //   </div>
       // </div>
 
+
       $(function() {
         var $searchBtn = $('.search__btn');
 
         $searchBtn.on('click', function(e){
           e.preventDefault();
-          var $searchText = $('.search__text__input').val();
+          var searchText = $('.search__text__input').val();
+          var $lists = $('.lists');
 
           $.ajax({
             url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
@@ -101,17 +103,37 @@
             datatype: 'json',
             data: {
               applicationId: appId,
-              booksGenreId: '001',
-              keyword: $searchText,
+              keyword: searchText,
               hits: 20,
               page: 100
             },
           })
           .done(function(data){
-            console.log(data.Items);
+            var booksData = data.Items;
+            console.log(booksData);
+            $.each(booksData, function(index, val){
+                var url = val.Item.itemUrl;
+                var img = val.Item.smallImageUrl;
+                var title = val.Item.title;
+                var author = val.Item.author;
+                var publisher = val.Item.publisherName;
+                var nestedDom = "";
+                nestedDom +=
+                  '<li class="lists__item">' +
+                    '<div class="lists__item__inner">' +
+                      '<a href="" class="lists__item__link" target="_blank">' +
+                        '<img src="' + img + '" class="lists__item__img" alt="">' +
+                        '<p class="lists__item__detail">作品名：' + title + '</p>' +
+                        '<p class="lists__item__detail">作者　：' + author + '</p>' +
+                        '<p class="lists__item__detail">出版社：' + publisher + '</p>' +
+                      '</a>' +
+                    '</div>' +
+                  '</li>';
+                $lists.append(nestedDom);
+            })
           })
-          .fail(function(data){
-            console.log(data);
+          .fail(function(error){
+            console.log(error);
           });
         });
       });
