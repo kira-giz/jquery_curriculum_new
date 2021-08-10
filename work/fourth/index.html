@@ -58,26 +58,23 @@
       // .stop() 現在動作中のアニメーション処理を全て中止します。
 
       $(function(){
-        // stop → 入れない場合、ホバーした分だけアニメーションが起動する
-        // stop → 入れた場合、起動しているアニメーションが全てストップする
-        // 今回は何回も連続でホバーした時ホバーされた分だけスライドダウンアップを繰り返してしまうのと、ホバーを途中で外しても必ず最後まで降りるのを抑制するため
 
-        var $hoverElem = $('.menu__list__title');
+        var $listTitle = $('.menu__list__title');
         var $downMenu = $('.menu__list__childList');
 
         function menuDown(e, elem){
-          // var $nextTarget = $(e.target).next();
-          var $nextTarget = $(e.target).siblings(elem);
-          $nextTarget.stop().slideDown();
+          // var $slideTarget = $(e.target).next();
+          var $slideTarget = $(e.target).siblings(elem);
+          $slideTarget.stop().slideDown();
         };
 
         function menuUp(e, elem){
-          // var $nextTarget = $(e.target).next();
-          var $nextTarget = $(e.target).siblings(elem);
-          $nextTarget.stop().slideUp();
+          // var $slideTarget = $(e.target).next();
+          var $slideTarget = $(e.target).siblings(elem);
+          $slideTarget.stop().slideUp();
         };
         
-        $hoverElem.hover(function(e){
+        $listTitle.hover(function(e){
           menuDown(e, $downMenu);
         }, function(e){
           menuUp(e, $downMenu);
@@ -87,23 +84,23 @@
       /*
       // オブジェクト
         function Drop() {
-          this.$hoverElem = $('.menu__list__title');
+          this.$listTitle = $('.menu__list__title');
           this.$downMenu = $('.menu__list__childList');
           this.bindDrop();
         };
 
         Drop.prototype.bindDrop = function() {
-          this.$hoverElem.hover(this.menuDown.bind(this), this.menuUp.bind(this));
+          this.$listTitle.hover(this.menuDown.bind(this), this.menuUp.bind(this));
         };
 
         Drop.prototype.menuDown = function(e) {
-          var $nextTarget = $(e.target).siblings(this.$downMenu);
-          $nextTarget.stop().slideDown();
+          var $slideTarget = $(e.target).siblings(this.$downMenu);
+          $slideTarget.stop().slideDown();
         };
 
         Drop.prototype.menuUp = function(e) {
-          var $nextTarget = $(e.target).siblings(this.$downMenu);
-          $nextTarget.stop().slideUp();
+          var $slideTarget = $(e.target).siblings(this.$downMenu);
+          $slideTarget.stop().slideUp();
         };
         */
 
@@ -111,23 +108,23 @@
         // クラス
         class Drop {
           constructor() {
-            this.$hoverElem = $('.menu__list__title');
+            this.$listTitle = $('.menu__list__title');
             this.$downMenu = $('.menu__list__childList');
             this.bindDrop();
           };
 
           bindDrop() {
-            this.$hoverElem.hover(this.menuDown.bind(this), this.menuUp.bind(this));
+            this.$listTitle.hover(this.menuDown.bind(this), this.menuUp.bind(this));
           };
 
           menuDown(e) {
-            var $nextTarget = $(e.target).siblings(this.$downMenu);
-            $nextTarget.stop().slideDown();
+            var $slideTarget = $(e.target).siblings(this.$downMenu);
+            $slideTarget.stop().slideDown();
           };
 
           menuUp(e) {
-            var $nextTarget = $(e.target).siblings(this.$downMenu);
-            $nextTarget.stop().slideUp();
+            var $slideTarget = $(e.target).siblings(this.$downMenu);
+            $slideTarget.stop().slideUp();
           };
         }
 
