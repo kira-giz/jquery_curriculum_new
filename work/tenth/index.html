@@ -90,16 +90,37 @@
 
 
       $(function() {
+        // 外部変数
+        var pageNum = 1;
+        var domArray = [];
+        var domParentArray = [];
+        var searchText = $('.search__text__input').val();
+
+        // DOM
+        var $lists = $('.lists');
+        var $pagerBtn = $('.btn-item');
         var $searchBtn = $('.search__btn');
 
+        // 検索
         $searchBtn.on('click', function(e){
-          var pageNum = 1;
-          var $lists = $('.lists');
-          var searchText = $('.search__text__input').val();
-          
           e.preventDefault();
-          // DOMの再代入
+          // 本の検索とDOMの挿入
+          bookSearch();
+        });
+
+        // ページャー
+        $pagerBtn.on('click', function(e){
+          e.preventDefault();
+          // クリック対象
+          pagerClick(e);
+        });
+
+        // 検索・DOM挿入
+        function bookSearch() {
+          // DOMを空に
           $lists.empty();
+          //ページャーの再代入
+          $('.pager').remove();
 
           $.ajax({
             url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
@@ -114,11 +135,12 @@
             },
           })
           .done(function(data){
+            // 必要データ
             var booksData = data.Items;
             var pageCount = data.pageCount;
-            console.log(data);
 
             $.each(booksData, function(index, val){
+              // 本の情報
               var bookInfo = {
                 url : val.Item.itemUrl,
                 img : val.Item.largeImageUrl,
@@ -127,6 +149,7 @@
                 publisher : val.Item.publisherName,
               };
 
+              // DOM挿入
               var nestedLists = "";
               nestedLists +=
                 '<li class="lists__item">' +
@@ -140,8 +163,16 @@
                   '</div>' +
                 '</li>';
               $lists.append(nestedLists);
+
+              // ページごとにDOMの配列を作成
+              domArray.push(nestedLists);
+              if(index == booksData.length - 1) {
+                domParentArray.push(domArray);
+                domArray = [];
+              };
             });
 
+            // ページャー挿入
             var pager = "";
             pager +=
               '<div class="pager" data-js="pager">' +
@@ -158,7 +189,42 @@
           .fail(function(error){
             console.log(error);
           });
-        });
+        };
+
+        // ページング
+        function pagerClick(e) {
+          var $target = $(e.target);
+          var data = $(e.target).data('js');
+
+          switch (data) {
+            case 'page-prev':
+              pageNum--;
+              if(pageNum == 0) {
+                pageNum = 1;
+                $target.prop("disabled", true);
+              } else {
+                $target.prop("disabled", false);
+                // 該当箇所をDOMに再描画
+                $lists.empty();
+                domParentArray[pageNum - 1].forEach(function(val) {
+                  $lists.append(val);
+                });
+              };
+              break;
+
+            case 'page-next':
+              pageNum++;
+              if(pageNum == 101) {
+                pageNum = 100;
+                // 該当箇所をDOMに再描画
+                $target.prop("disabled", true);
+              } else {
+                $target.prop("disabled", false);
+                bookSearch();
+              }
+              break;
+          };
+        };
       });
 
     </script>
