@@ -132,7 +132,6 @@ $(function(){
   });
 
 // 第10問 id='q10'の子要素をクリックしたら、その要素のインデックスと等しいid='q11'の子要素にlargeというクラスを追加せよ。
-// childrenが直下、findが全ての子要素
   $('#q10').children('li').click(function(){
     var i = $(this).index();
     $('#q11').children('li').eq(i).addClass('large');
