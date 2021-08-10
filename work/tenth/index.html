@@ -93,9 +93,13 @@
         var $searchBtn = $('.search__btn');
 
         $searchBtn.on('click', function(e){
-          e.preventDefault();
-          var searchText = $('.search__text__input').val();
+          var pageNum = 1;
           var $lists = $('.lists');
+          var searchText = $('.search__text__input').val();
+          
+          e.preventDefault();
+          // DOMの再代入
+          $lists.empty();
 
           $.ajax({
             url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
@@ -104,33 +108,52 @@
             data: {
               applicationId: appId,
               keyword: searchText,
+              booksGenreId: '001',
               hits: 20,
-              page: 100
+              page: pageNum
             },
           })
           .done(function(data){
             var booksData = data.Items;
-            console.log(booksData);
+            var pageCount = data.pageCount;
+            console.log(data);
+
             $.each(booksData, function(index, val){
-                var url = val.Item.itemUrl;
-                var img = val.Item.smallImageUrl;
-                var title = val.Item.title;
-                var author = val.Item.author;
-                var publisher = val.Item.publisherName;
-                var nestedDom = "";
-                nestedDom +=
-                  '<li class="lists__item">' +
-                    '<div class="lists__item__inner">' +
-                      '<a href="" class="lists__item__link" target="_blank">' +
-                        '<img src="' + img + '" class="lists__item__img" alt="">' +
-                        '<p class="lists__item__detail">作品名：' + title + '</p>' +
-                        '<p class="lists__item__detail">作者　：' + author + '</p>' +
-                        '<p class="lists__item__detail">出版社：' + publisher + '</p>' +
-                      '</a>' +
-                    '</div>' +
-                  '</li>';
-                $lists.append(nestedDom);
-            })
+              var bookInfo = {
+                url : val.Item.itemUrl,
+                img : val.Item.largeImageUrl,
+                title : val.Item.title,
+                author : val.Item.author,
+                publisher : val.Item.publisherName,
+              };
+
+              var nestedLists = "";
+              nestedLists +=
+                '<li class="lists__item">' +
+                  '<div class="lists__item__inner">' +
+                    '<a href="' + bookInfo.url + '" class="lists__item__link" target="_blank">' +
+                      '<img src="' + bookInfo.img + '" class="lists__item__img" alt="">' +
+                      '<p class="lists__item__detail">作品名：' + bookInfo.title + '</p>' +
+                      '<p class="lists__item__detail">作者　：' + bookInfo.author + '</p>' +
+                      '<p class="lists__item__detail">出版社：' + bookInfo.publisher + '</p>' +
+                    '</a>' +
+                  '</div>' +
+                '</li>';
+              $lists.append(nestedLists);
+            });
+
+            var pager = "";
+            pager +=
+              '<div class="pager" data-js="pager">' +
+                '<div class="counter">' +
+                  '<span class="counter-current">' + pageNum + '</span>/<span class="counter-all">' + pageCount + '</span>' +
+                '</div>' +
+                '<div class="btn-wrapper">' +
+                  '<a class="btn-item" data-js="page-prev" href="">前へ</a>' +
+                  '<a class="btn-item" data-js="page-next" href="">次へ</a>' +
+                '</div>'
+              '</div>';
+            $lists.after(pager);
           })
           .fail(function(error){
             console.log(error);
