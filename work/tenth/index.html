@@ -105,7 +105,7 @@
         var $searchBtn = $('.search__btn');
 
         // 検索
-        $searchBtn.on('click', function(e){
+        $searchBtn.on('click', function(){
           // 本の検索とDOMの挿入
           bookSearch(rakutenBooks);
         });
@@ -113,7 +113,7 @@
         // ページャー
         $(document).on('click', '.btn-item', function(e){
           e.preventDefault();
-          pagerClick(e);
+          pagerClick(e, rakutenBooks);
         });
 
         // 検索・DOM挿入
@@ -173,8 +173,7 @@
               });
 
               // ページャー挿入
-              var pager = "";
-              pager +=
+              var pager =
                 '<div class="pager" data-js="pager">' +
                   '<div class="counter">' +
                     '<span class="counter-current">' + params.page + '</span>/<span class="counter-all">' + data.pageCount + '</span>' +
@@ -205,7 +204,7 @@
         // ページング
         function pagerClick(e, params) {
           var $target = $(e.target);
-          var data = $(e.target).data('js');
+          var data = $target.data('js');
 
           switch (data) {
             case 'page-prev':
