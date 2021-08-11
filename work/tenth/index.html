@@ -23,7 +23,6 @@
         </div>
         <div class="message"></div>
         <ul class="lists"></ul>
-        <a href="" class="kensyo">検証</a>
       </div>
     </div>
     <script src="../../common/js/jquery.js"></script>
@@ -100,12 +99,6 @@
           page: 1
         };
 
-        $('.kensyo').on('click', function(e){
-          console.log($('.kensyo'));
-          // e.preventDefault();
-          return false;
-        })
-
         // DOM
         var $lists = $('.lists');
         var $message = $('.message');
@@ -118,9 +111,9 @@
         });
 
         // ページャー
-        $('[data-js="page-prev"]').on('click', function(e){
+        $(document).on('click', '.btn-item', function(e){
           e.preventDefault();
-          return false;
+          pagerClick(e);
         });
 
         // 検索・DOM挿入
@@ -139,7 +132,7 @@
             data: params
           })
           .done(function(data){
-            // 配列データ
+            // 返還データ配列
             var booksData = data.Items;
             // 検索結果0件
             var searchZero =
@@ -152,6 +145,7 @@
             if(booksData.length === 0) {
               $message.append(searchZero);
             } else {
+              // 検索結果有り
               $.each(booksData, function(index, val){
                 // 本情報
                 var bookInfo = {
@@ -191,12 +185,14 @@
                   '</div>'
                 '</div>';
               $lists.after(pager);
-              console.log($('[data-js="page-prev"]'));
+
               // ボタン非活性
               if(data.pageCount === 1) {
                 $('.btn-item').addClass('disabled');
-              } else {
+              } else if(params.page === 1){
                 $('[data-js="page-prev"]').addClass('disabled');
+              } else {
+                $('.btn-item').removeClass('disabled');
               };
             };
 
@@ -207,35 +203,28 @@
         };
 
         // ページング
-        function pagerClick(e) {
+        function pagerClick(e, params) {
           var $target = $(e.target);
           var data = $(e.target).data('js');
-          console.log(data);
 
           switch (data) {
             case 'page-prev':
-              rakutenBooks.page--;
-              console.log(rakutenBooks.page);
-              if(rakutenBooks.page === 0) {
-                rakutenBooks.page = 1;
+              params.page--;
+              if(params.page === 0) {
+                params.page = 1;
                 $target.addClass("disabled");
               } else {
-                $target.addClass("disabled");
-                // 該当箇所をDOMに再描画
-                $lists.empty();
                 bookSearch(rakutenBooks);
               };
               break;
 
             case 'page-next':
-              rakutenBooks.page++;
-              console.log(rakutenBooks.page);
-              if(rakutenBooks.page === 101) {
-                rakutenBooks.page = 100;
+              params.page++;
+              if(params.page === 101) {
+                params.page = 100;
                 // 該当箇所をDOMに再描画
                 $target.addClass("disabled");
               } else {
-                $target.addClass("disabled");
                 bookSearch(rakutenBooks);
               };
               break;
