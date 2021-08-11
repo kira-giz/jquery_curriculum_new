@@ -91,8 +91,6 @@
 
       $(function() {
         // 外部変数
-        var domArray = [];
-        var domParentArray = [];
         var rakutenBooks = {
           applicationId: appId,
           booksGenreId: '001',
@@ -103,6 +101,7 @@
 
         // DOM
         var $lists = $('.lists');
+        var $message = $('.message');
         var $pagerBtn = $('.btn-item');
         var $searchBtn = $('.search__btn');
 
@@ -115,7 +114,7 @@
 
         // ページャー
         $pagerBtn.on('click', function(e){
-          e.preventDefault();
+          // e.preventDefault();
           // クリック対象
           pagerClick(e);
         });
@@ -139,52 +138,62 @@
             // 必要データ
             var booksData = data.Items;
 
-            $.each(booksData, function(index, val){
-              // 本情報
-              var bookInfo = {
-                url : val.Item.itemUrl,
-                img : val.Item.largeImageUrl,
-                title : val.Item.title,
-                author : val.Item.author,
-                publisher : val.Item.publisherName,
-              };
+            // 検索結果0件
+            var searchZero =
+              '<p>' +
+                '検索結果が見つかりませんでした。' +
+                '<br>' +
+                '別のキーワードで検索して下さい。' +
+              '</p>';
 
-              // DOM挿入
-              var nestedLists = "";
-              nestedLists +=
-                '<li class="lists__item">' +
-                  '<div class="lists__item__inner">' +
-                    '<a href="' + bookInfo.url + '" class="lists__item__link" target="_blank">' +
-                      '<img src="' + bookInfo.img + '" class="lists__item__img" alt="">' +
-                      '<p class="lists__item__detail">作品名：' + bookInfo.title + '</p>' +
-                      '<p class="lists__item__detail">作者　：' + bookInfo.author + '</p>' +
-                      '<p class="lists__item__detail">出版社：' + bookInfo.publisher + '</p>' +
-                    '</a>' +
+            if(booksData.length === 0) {
+              $message.append(searchZero);
+            } else {
+              $.each(booksData, function(index, val){
+                // 本情報
+                var bookInfo = {
+                  url : val.Item.itemUrl,
+                  img : val.Item.largeImageUrl,
+                  title : val.Item.title,
+                  author : val.Item.author,
+                  publisher : val.Item.publisherName,
+                };
+
+                // DOM挿入
+                var nestedLists = "";
+                nestedLists +=
+                  '<li class="lists__item">' +
+                    '<div class="lists__item__inner">' +
+                      '<a href="' + bookInfo.url + '" class="lists__item__link" target="_blank">' +
+                        '<img src="' + bookInfo.img + '" class="lists__item__img" alt="">' +
+                        '<p class="lists__item__detail">作品名：' + bookInfo.title + '</p>' +
+                        '<p class="lists__item__detail">作者　：' + bookInfo.author + '</p>' +
+                        '<p class="lists__item__detail">出版社：' + bookInfo.publisher + '</p>' +
+                      '</a>' +
+                    '</div>' +
+                  '</li>';
+                $lists.append(nestedLists);
+              });
+
+              // ページャー挿入
+              var pager = "";
+              pager +=
+                '<div class="pager" data-js="pager">' +
+                  '<div class="counter">' +
+                    '<span class="counter-current">' + params.page + '</span>/<span class="counter-all">' + data.pageCount + '</span>' +
                   '</div>' +
-                '</li>';
-              $lists.append(nestedLists);
+                  '<div class="btn-wrapper">' +
+                    '<a class="btn-item" data-js="page-prev" href="">前へ</a>' +
+                    '<a class="btn-item" data-js="page-next" href="">次へ</a>' +
+                  '</div>'
+                '</div>';
+              $lists.after(pager);
+              var pagerData = $pagerBtn.data('js');
+              if(rakutenBooks.page === 1 && pagerData === 'page-prev') {
+                $pagerBtn.prop("disabled", true);
+              }
+            };
 
-              // ページごとにDOMの配列を作成
-              domArray.push(nestedLists);
-              if(index == booksData.length - 1) {
-                domParentArray.push(domArray);
-                domArray = [];
-              };
-            });
-
-            // ページャー挿入
-            var pager = "";
-            pager +=
-              '<div class="pager" data-js="pager">' +
-                '<div class="counter">' +
-                  '<span class="counter-current">' + params.page + '</span>/<span class="counter-all">' + data.pageCount + '</span>' +
-                '</div>' +
-                '<div class="btn-wrapper">' +
-                  '<a class="btn-item" data-js="page-prev" href="">前へ</a>' +
-                  '<a class="btn-item" data-js="page-next" href="">次へ</a>' +
-                '</div>'
-              '</div>';
-            $lists.after(pager);
           })
           .fail(function(error){
             console.log(error);
@@ -200,23 +209,21 @@
             case 'page-prev':
               rakutenBooks.page--;
               console.log(rakutenBooks.page);
-              if(rakutenBooks.page == 0) {
+              if(rakutenBooks.page === 0) {
                 rakutenBooks.page = 1;
                 $target.prop("disabled", true);
               } else {
                 $target.prop("disabled", false);
                 // 該当箇所をDOMに再描画
                 $lists.empty();
-                domParentArray[rakutenBooks.page - 1].forEach(function(val) {
-                  $lists.append(val);
-                });
+                bookSearch(rakutenBooks);
               };
               break;
 
             case 'page-next':
               rakutenBooks.page++;
               console.log(rakutenBooks.page);
-              if(rakutenBooks.page == 101) {
+              if(rakutenBooks.page === 101) {
                 rakutenBooks.page = 100;
                 // 該当箇所をDOMに再描画
                 $target.prop("disabled", true);
