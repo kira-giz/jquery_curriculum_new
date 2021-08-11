@@ -105,13 +105,13 @@
         var $searchBtn = $('.search__btn');
 
         // 検索
-        $searchBtn.on('click', function(){
+        $searchBtn.on('click', function() {
           // 本の検索とDOMの挿入
           bookSearch(rakutenBooks);
         });
 
         // ページャー
-        $(document).on('click', '.btn-item', function(e){
+        $(document).on('click', '.btn-item', function(e) {
           e.preventDefault();
           pagerClick(e, rakutenBooks);
         });
@@ -142,11 +142,12 @@
                 '別のキーワードで検索して下さい。' +
               '</p>';
 
-            if(booksData.length === 0) {
+            if (booksData.length === 0) {
               $message.append(searchZero);
             } else {
-              // 検索結果有り
-              $.each(booksData, function(index, val){
+
+              // 検索結果
+              $.each(booksData, function(val) {
                 // 本情報
                 var bookInfo = {
                   url : val.Item.itemUrl,
@@ -156,7 +157,6 @@
                   publisher : val.Item.publisherName,
                 };
 
-                // DOM挿入
                 var nestedLists = "";
                 nestedLists +=
                   '<li class="lists__item">' +
@@ -172,7 +172,7 @@
                 $lists.append(nestedLists);
               });
 
-              // ページャー挿入
+              // ページャー
               var pager =
                 '<div class="pager" data-js="pager">' +
                   '<div class="counter">' +
@@ -186,9 +186,9 @@
               $lists.after(pager);
 
               // ボタン非活性
-              if(data.pageCount === 1) {
+              if (data.pageCount === 1) {
                 $('.btn-item').addClass('disabled');
-              } else if(params.page === 1){
+              } else if (params.page === 1) {
                 $('[data-js="page-prev"]').addClass('disabled');
               } else {
                 $('.btn-item').removeClass('disabled');
@@ -196,7 +196,7 @@
             };
 
           })
-          .fail(function(error){
+          .fail(function(error) {
             console.log(error);
           });
         };
@@ -209,7 +209,7 @@
           switch (data) {
             case 'page-prev':
               params.page--;
-              if(params.page === 0) {
+              if (params.page === 0) {
                 params.page = 1;
                 $target.addClass("disabled");
               } else {
@@ -219,7 +219,7 @@
 
             case 'page-next':
               params.page++;
-              if(params.page === 101) {
+              if (params.page === 101) {
                 params.page = 100;
                 // 該当箇所をDOMに再描画
                 $target.addClass("disabled");
