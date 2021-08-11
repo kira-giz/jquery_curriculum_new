@@ -62,6 +62,12 @@
         var $listTitle = $('.menu__list__title');
         var $downMenu = $('.menu__list__childList');
 
+        $listTitle.hover(function(e){
+          menuDown(e, $downMenu);
+        }, function(e){
+          menuUp(e, $downMenu);
+        });
+
         function menuDown(e, elem){
           // var $slideTarget = $(e.target).next();
           var $slideTarget = $(e.target).siblings(elem);
@@ -73,12 +79,6 @@
           var $slideTarget = $(e.target).siblings(elem);
           $slideTarget.stop().slideUp();
         };
-        
-        $listTitle.hover(function(e){
-          menuDown(e, $downMenu);
-        }, function(e){
-          menuUp(e, $downMenu);
-        });
       });
 
       /*
