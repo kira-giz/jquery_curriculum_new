@@ -102,21 +102,22 @@
         // DOM
         var $lists = $('.lists');
         var $message = $('.message');
-        var $pagerBtn = $('.btn-item');
         var $searchBtn = $('.search__btn');
 
         // 検索
         $searchBtn.on('click', function(e){
-          e.preventDefault();
           // 本の検索とDOMの挿入
           bookSearch(rakutenBooks);
         });
 
         // ページャー
-        $pagerBtn.on('click', function(e){
-          // e.preventDefault();
-          // クリック対象
-          pagerClick(e);
+        $.each($('.btn-item'), function(index, val){
+            val.eq(0).on('click', function(e){
+            e.preventDefault();
+            // クリック対象
+            console.log(e);
+            pagerClick(e);
+          })
         });
 
         // 検索・DOM挿入
@@ -135,9 +136,8 @@
             data: params
           })
           .done(function(data){
-            // 必要データ
+            // 配列データ
             var booksData = data.Items;
-
             // 検索結果0件
             var searchZero =
               '<p>' +
@@ -188,10 +188,12 @@
                   '</div>'
                 '</div>';
               $lists.after(pager);
-              var pagerData = $pagerBtn.data('js');
-              if(rakutenBooks.page === 1 && pagerData === 'page-prev') {
-                $pagerBtn.prop("disabled", true);
-              }
+              // ボタン非活性
+              if(data.pageCount === 1) {
+                $('.btn-item').addClass('disabled');
+              } else {
+                $('[data-js="page-prev"]').addClass('disabled');
+              };
             };
 
           })
@@ -204,6 +206,7 @@
         function pagerClick(e) {
           var $target = $(e.target);
           var data = $(e.target).data('js');
+          console.log(data);
 
           switch (data) {
             case 'page-prev':
