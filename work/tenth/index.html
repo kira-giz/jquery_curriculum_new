@@ -23,6 +23,7 @@
         </div>
         <div class="message"></div>
         <ul class="lists"></ul>
+        <a href="" class="kensyo">検証</a>
       </div>
     </div>
     <script src="../../common/js/jquery.js"></script>
@@ -99,6 +100,12 @@
           page: 1
         };
 
+        $('.kensyo').on('click', function(e){
+          console.log($('.kensyo'));
+          // e.preventDefault();
+          return false;
+        })
+
         // DOM
         var $lists = $('.lists');
         var $message = $('.message');
@@ -111,13 +118,9 @@
         });
 
         // ページャー
-        $.each($('.btn-item'), function(index, val){
-            val.eq(0).on('click', function(e){
-            e.preventDefault();
-            // クリック対象
-            console.log(e);
-            pagerClick(e);
-          })
+        $('[data-js="page-prev"]').on('click', function(e){
+          e.preventDefault();
+          return false;
         });
 
         // 検索・DOM挿入
@@ -188,6 +191,7 @@
                   '</div>'
                 '</div>';
               $lists.after(pager);
+              console.log($('[data-js="page-prev"]'));
               // ボタン非活性
               if(data.pageCount === 1) {
                 $('.btn-item').addClass('disabled');
@@ -214,9 +218,9 @@
               console.log(rakutenBooks.page);
               if(rakutenBooks.page === 0) {
                 rakutenBooks.page = 1;
-                $target.prop("disabled", true);
+                $target.addClass("disabled");
               } else {
-                $target.prop("disabled", false);
+                $target.addClass("disabled");
                 // 該当箇所をDOMに再描画
                 $lists.empty();
                 bookSearch(rakutenBooks);
@@ -229,9 +233,9 @@
               if(rakutenBooks.page === 101) {
                 rakutenBooks.page = 100;
                 // 該当箇所をDOMに再描画
-                $target.prop("disabled", true);
+                $target.addClass("disabled");
               } else {
-                $target.prop("disabled", false);
+                $target.addClass("disabled");
                 bookSearch(rakutenBooks);
               };
               break;
