@@ -91,10 +91,15 @@
 
       $(function() {
         // 外部変数
-        var pageNum = 1;
         var domArray = [];
         var domParentArray = [];
-        var searchText = $('.search__text__input').val();
+        var rakutenBooks = {
+          applicationId: appId,
+          booksGenreId: '001',
+          keyword: "",
+          hits: 20,
+          page: 1
+        };
 
         // DOM
         var $lists = $('.lists');
@@ -105,7 +110,7 @@
         $searchBtn.on('click', function(e){
           e.preventDefault();
           // 本の検索とDOMの挿入
-          bookSearch();
+          bookSearch(rakutenBooks);
         });
 
         // ページャー
@@ -116,31 +121,26 @@
         });
 
         // 検索・DOM挿入
-        function bookSearch() {
-          // DOMを空に
+        function bookSearch(params) {
+          // DOM再代入
           $lists.empty();
-          //ページャーの再代入
+          // ページャー再代入
           $('.pager').remove();
+          // 検索ワード
+          params.keyword = $('.search__text__input').val();
 
           $.ajax({
             url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
             type: 'GET',
             datatype: 'json',
-            data: {
-              applicationId: appId,
-              keyword: searchText,
-              booksGenreId: '001',
-              hits: 20,
-              page: pageNum
-            },
+            data: params
           })
           .done(function(data){
             // 必要データ
             var booksData = data.Items;
-            var pageCount = data.pageCount;
 
             $.each(booksData, function(index, val){
-              // 本の情報
+              // 本情報
               var bookInfo = {
                 url : val.Item.itemUrl,
                 img : val.Item.largeImageUrl,
@@ -177,7 +177,7 @@
             pager +=
               '<div class="pager" data-js="pager">' +
                 '<div class="counter">' +
-                  '<span class="counter-current">' + pageNum + '</span>/<span class="counter-all">' + pageCount + '</span>' +
+                  '<span class="counter-current">' + params.page + '</span>/<span class="counter-all">' + data.pageCount + '</span>' +
                 '</div>' +
                 '<div class="btn-wrapper">' +
                   '<a class="btn-item" data-js="page-prev" href="">前へ</a>' +
@@ -198,30 +198,32 @@
 
           switch (data) {
             case 'page-prev':
-              pageNum--;
-              if(pageNum == 0) {
-                pageNum = 1;
+              rakutenBooks.page--;
+              console.log(rakutenBooks.page);
+              if(rakutenBooks.page == 0) {
+                rakutenBooks.page = 1;
                 $target.prop("disabled", true);
               } else {
                 $target.prop("disabled", false);
                 // 該当箇所をDOMに再描画
                 $lists.empty();
-                domParentArray[pageNum - 1].forEach(function(val) {
+                domParentArray[rakutenBooks.page - 1].forEach(function(val) {
                   $lists.append(val);
                 });
               };
               break;
 
             case 'page-next':
-              pageNum++;
-              if(pageNum == 101) {
-                pageNum = 100;
+              rakutenBooks.page++;
+              console.log(rakutenBooks.page);
+              if(rakutenBooks.page == 101) {
+                rakutenBooks.page = 100;
                 // 該当箇所をDOMに再描画
                 $target.prop("disabled", true);
               } else {
                 $target.prop("disabled", false);
-                bookSearch();
-              }
+                bookSearch(rakutenBooks);
+              };
               break;
           };
         };
