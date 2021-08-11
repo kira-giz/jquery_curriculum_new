@@ -102,7 +102,11 @@
       $(function(){
         var $selectBox = $('.select');
         var $categoryList = $('.list li');
-        
+
+        $selectBox.change(function(e) {
+          sortCategory($categoryList, e);
+        });
+
         function sortCategory(list, e){
           list.each(function() {
             var value = $(e.target).val();
@@ -115,10 +119,7 @@
               $(this).hide();
             };
           });
-        }
-        $selectBox.change(function(e) {
-          sortCategory($categoryList, e);
-        });
+        };
       });
 
       /*
