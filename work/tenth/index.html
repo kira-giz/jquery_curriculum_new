@@ -99,7 +99,7 @@
           page: 1
         };
         // 総ページ数
-        let pageCount = null;
+        var PAGE_COUNT = null;
 
         // DOM
         var $lists = $('.lists');
@@ -111,8 +111,8 @@
           var keyword = $('.search__text__input').val();
           if (keyword === "") {
             domReset();
-            var errorMessage = '<p class="error-message">' + '検索文字が入力されていません。' + '</p>';
-            $message.append(errorMessage);
+            var ERROR_MESSAGE = '<p class="error-message">' + '検索文字が入力されていません。' + '</p>';
+            $message.append(ERROR_MESSAGE);
           } else {
             // 本の検索とDOMの挿入
             rakutenBooks.page = 1;
@@ -139,10 +139,10 @@
             data: params
           })
           .done(function(data){
-            pageCount = data.pageCount;
+            PAGE_COUNT = data.pageCount;
             var booksData = data.Items;
             // 検索結果0件
-            var searchZero =
+            var SEARCH_ZERO =
               '<p>' +
                 '検索結果が見つかりませんでした。' +
                 '<br>' +
@@ -150,7 +150,7 @@
               '</p>';
 
             if (booksData.length === 0) {
-              $message.append(searchZero);
+              $message.append(SEARCH_ZERO);
             } else {
               // 検索結果
               $.each(booksData, function(index, val) {
@@ -195,10 +195,12 @@
 
         // ページャー
         function insertPager() {
+          var NOW_PAGE = rakutenBooks.page;
+
           var pager =
             '<div class="pager" data-js="pager">' +
               '<div class="counter">' +
-                '<span class="counter-current">' + rakutenBooks.page + '</span>/<span class="counter-all">' + pageCount + '</span>' +
+                '<span class="counter-current">' + NOW_PAGE + '</span>/<span class="counter-all">' + PAGE_COUNT + '</span>' +
               '</div>' +
               '<div class="btn-wrapper">' +
                 '<a class="btn-item" data-js="page-prev" href="">前へ</a>' +
@@ -207,24 +209,29 @@
             '</div>';
           $lists.after(pager);
 
-          if (pageCount === 1) {
+          var $prevBtn = $('[data-js="page-prev"]');
+          var $nextBtn = $('[data-js="page-next"]');
+          if (PAGE_COUNT === 1) {
             $('.btn-item').addClass('disabled');
-          } else if (rakutenBooks.page === 1) {
-            $('[data-js="page-prev"]').addClass('disabled');
-          } else if (pageCount === rakutenBooks.page){
-            $('[data-js="page-next"]').addClass('disabled');
-          } else {
-            $('.btn-item').removeClass('disabled');
-          };
+          } else if (NOW_PAGE === 1 && PAGE_COUNT >= 2) {
+            $nextBtn.removeClass('disabled');
+            $prevBtn.addClass('disabled');
+          } else if (PAGE_COUNT !== 1 && PAGE_COUNT === NOW_PAGE) {
+            $prevBtn.removeClass('disabled');
+            $nextBtn.addClass('disabled');
+          }
         };
 
         // ページング
+        // イベント対象の取得
+        // rakutenBooksから現在のページを取得
+        // データを基にクリックした時の挙動を設定
         function paging(e) {
           var $target = $(e.target);
-          var data = $target.data('js');
+          var targetData = $target.data('js');
           var NOW_PAGE = rakutenBooks.page;
 
-          switch (data) {
+          switch (targetData) {
             case 'page-prev':
             if (NOW_PAGE === 1) {
               return;
@@ -235,7 +242,7 @@
             break;
 
             case 'page-next':
-            if (NOW_PAGE === 100 || NOW_PAGE === pageCount) {
+            if (NOW_PAGE === 100 || NOW_PAGE === PAGE_COUNT) {
               return;
             } else {
               rakutenBooks.page++;
