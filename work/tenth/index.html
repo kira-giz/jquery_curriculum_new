@@ -98,6 +98,8 @@
           hits: 20,
           page: 1
         };
+        // 総ページ数
+        let pageCount = null;
 
         // DOM
         var $lists = $('.lists');
@@ -127,7 +129,6 @@
         // 検索・DOM挿入
         function bookSearch(params) {
           domReset();
-          $('.pager').remove();
           // 検索ワード
           params.keyword = $('.search__text__input').val();
 
@@ -138,7 +139,7 @@
             data: params
           })
           .done(function(data){
-            // 返還データ配列
+            pageCount = data.pageCount;
             var booksData = data.Items;
             // 検索結果0件
             var searchZero =
@@ -193,11 +194,11 @@
         };
 
         // ページャー
-        function insertPager(data) {
+        function insertPager() {
           var pager =
             '<div class="pager" data-js="pager">' +
               '<div class="counter">' +
-                '<span class="counter-current">' + rakutenBooks.page + '</span>/<span class="counter-all">' + data.pageCount + '</span>' +
+                '<span class="counter-current">' + rakutenBooks.page + '</span>/<span class="counter-all">' + pageCount + '</span>' +
               '</div>' +
               '<div class="btn-wrapper">' +
                 '<a class="btn-item" data-js="page-prev" href="">前へ</a>' +
@@ -206,11 +207,11 @@
             '</div>';
           $lists.after(pager);
 
-          if (data.pageCount === 1) {
+          if (pageCount === 1) {
             $('.btn-item').addClass('disabled');
           } else if (rakutenBooks.page === 1) {
             $('[data-js="page-prev"]').addClass('disabled');
-          } else if (data.pageCount === rakutenBooks.page){
+          } else if (pageCount === rakutenBooks.page){
             $('[data-js="page-next"]').addClass('disabled');
           } else {
             $('.btn-item').removeClass('disabled');
@@ -218,31 +219,29 @@
         };
 
         // ページング
-        function paging(e, params) {
+        function paging(e) {
           var $target = $(e.target);
           var data = $target.data('js');
+          var NOW_PAGE = rakutenBooks.page;
 
           switch (data) {
             case 'page-prev':
-              params.page--;
-              if (params.page === 0) {
-                params.page = 1;
-                $target.addClass("disabled");
-              } else {
-                bookSearch(rakutenBooks);
-              };
-              break;
+            if (NOW_PAGE === 1) {
+              return;
+            } else {
+              rakutenBooks.page--;
+              bookSearch(rakutenBooks);
+            };
+            break;
 
             case 'page-next':
-              params.page++;
-              if (params.page === 101) {
-                params.page = 100;
-                // 該当箇所をDOMに再描画
-                $target.addClass("disabled");
-              } else {
-                bookSearch(rakutenBooks);
-              };
-              break;
+            if (NOW_PAGE === 100 || NOW_PAGE === pageCount) {
+              return;
+            } else {
+              rakutenBooks.page++;
+              bookSearch(rakutenBooks);
+            };
+            break;
           };
         };
 
