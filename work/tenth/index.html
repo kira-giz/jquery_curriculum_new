@@ -90,7 +90,7 @@
 
 
       $(function() {
-        // 外部変数
+        // APIパラメーター
         var rakutenBooks = {
           applicationId: appId,
           booksGenreId: '001',
@@ -110,24 +110,26 @@
         $searchBtn.on('click', function() {
           var keyword = $('.search__text__input').val();
           if (keyword === "") {
+            // 検索ワードなし
             domReset();
             var ERROR_MESSAGE = '<p class="error-message">' + '検索文字が入力されていません。' + '</p>';
             $message.append(ERROR_MESSAGE);
           } else {
-            // 本の検索とDOMの挿入
+            // 検索ワードあり
             rakutenBooks.page = 1;
             bookSearch(rakutenBooks);
           }
         });
 
-        // ページャー
+        // ページング
         $(document).on('click', '.btn-item', function(e) {
           e.preventDefault();
-          paging(e, rakutenBooks);
+          paging(e);
         });
 
         // 検索・DOM挿入
         function bookSearch(params) {
+          // DOMのリセット
           domReset();
           // 検索ワード
           params.keyword = $('.search__text__input').val();
@@ -141,20 +143,19 @@
           .done(function(data){
             PAGE_COUNT = data.pageCount;
             var booksData = data.Items;
-            // 検索結果0件
-            var SEARCH_ZERO =
-              '<p>' +
-                '検索結果が見つかりませんでした。' +
-                '<br>' +
-                '別のキーワードで検索して下さい。' +
-              '</p>';
 
             if (booksData.length === 0) {
+              // 検索結果0件
+              var SEARCH_ZERO =
+                '<p>' +
+                  '検索結果が見つかりませんでした。' +
+                  '<br>' +
+                  '別のキーワードで検索して下さい。' +
+                '</p>';
               $message.append(SEARCH_ZERO);
             } else {
-              // 検索結果
+              // 検索結果1以上
               $.each(booksData, function(index, val) {
-                // 本情報
                 var bookInfo = {
                   url : val.Item.itemUrl,
                   img : val.Item.largeImageUrl,
@@ -162,13 +163,12 @@
                   author : val.Item.author,
                   publisher : val.Item.publisherName,
                 };
-
                 // DOM挿入
                 nestList(bookInfo);
               });
 
-              // ページャーDOM / 非活性
-              insertPager(data);
+              // ページャー挿入
+              insertPager();
             };
           })
           .fail(function(error) {
@@ -176,7 +176,14 @@
           });
         };
 
-        // データ描画
+        // DOMリセット
+        function domReset() {
+          $lists.empty();
+          $message.empty();
+          $('.pager').remove();
+        };
+
+        // データ描画（検索）
         function nestList(info) {
           var nestedLists = "";
           nestedLists +=
@@ -193,7 +200,7 @@
           $lists.append(nestedLists);
         };
 
-        // ページャー
+        // ページャー（検索）
         function insertPager() {
           var NOW_PAGE = rakutenBooks.page;
 
@@ -209,26 +216,24 @@
             '</div>';
           $lists.after(pager);
 
-          var $prevBtn = $('[data-js="page-prev"]');
-          var $nextBtn = $('[data-js="page-next"]');
+          var $prev = $('[data-js="page-prev"]');
+          var $next = $('[data-js="page-next"]');
           if (PAGE_COUNT === 1) {
             $('.btn-item').addClass('disabled');
           } else if (NOW_PAGE === 1 && PAGE_COUNT >= 2) {
-            $nextBtn.removeClass('disabled');
-            $prevBtn.addClass('disabled');
+            $next.removeClass('disabled');
+            $prev.addClass('disabled');
           } else if (PAGE_COUNT !== 1 && PAGE_COUNT === NOW_PAGE) {
-            $prevBtn.removeClass('disabled');
-            $nextBtn.addClass('disabled');
+            $prev.removeClass('disabled');
+            $next.addClass('disabled');
           }
         };
 
-        // ページング
-        // イベント対象の取得
-        // rakutenBooksから現在のページを取得
-        // データを基にクリックした時の挙動を設定
+        // ページング（ページング）
         function paging(e) {
           var $target = $(e.target);
           var targetData = $target.data('js');
+          // ページング時点でのページ数
           var NOW_PAGE = rakutenBooks.page;
 
           switch (targetData) {
@@ -250,13 +255,6 @@
             };
             break;
           };
-        };
-
-        // DOMリセット
-        function domReset() {
-          $lists.empty();
-          $message.empty();
-          $('.pager').remove();
         };
       });
 
