@@ -212,6 +212,8 @@
             $('.btn-item').addClass('disabled');
           } else if (rakutenBooks.page === 1) {
             $('[data-js="page-prev"]').addClass('disabled');
+          } else if (data.pageCount === rakutenBooks.page){
+            $('[data-js="page-next"]').addClass('disabled');
           } else {
             $('.btn-item').removeClass('disabled');
           };
