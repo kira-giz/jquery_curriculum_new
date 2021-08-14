@@ -90,7 +90,7 @@
 
 
       $(function() {
-        // APIパラメーター
+        // ---変数---
         var rakutenBooks = {
           applicationId: appId,
           booksGenreId: '001',
@@ -98,14 +98,15 @@
           hits: 20,
           page: 1
         };
-        // 総ページ数
         var PAGE_COUNT = null;
 
         // DOM
         var $lists = $('.lists');
         var $message = $('.message');
         var $searchBtn = $('.search__btn');
+        // ---変数---
 
+        // ---イベント---
         // 検索
         $searchBtn.on('click', function() {
           var keyword = $('.search__text__input').val();
@@ -126,7 +127,9 @@
           e.preventDefault();
           paging(e);
         });
+        // ---イベント---
 
+        // ---関数---
         // 検索・DOM挿入
         function bookSearch(params) {
           // DOMのリセット
@@ -256,6 +259,7 @@
             break;
           };
         };
+        // ---関数---
       });
 
     </script>
