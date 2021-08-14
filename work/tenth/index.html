@@ -108,6 +108,7 @@
         $searchBtn.on('click', function() {
           var keyword = $('.search__text__input').val();
           if (keyword === "") {
+            domReset();
             var errorMessage = '<p class="error-message">' + '検索文字が入力されていません。' + '</p>';
             $message.append(errorMessage);
           } else {
@@ -125,10 +126,7 @@
 
         // 検索・DOM挿入
         function bookSearch(params) {
-          // DOM再代入
-          $lists.empty();
-          $message.empty();
-          // ページャー再代入
+          domReset();
           $('.pager').remove();
           // 検索ワード
           params.keyword = $('.search__text__input').val();
@@ -246,6 +244,13 @@
               };
               break;
           };
+        };
+
+        // DOMリセット
+        function domReset() {
+          $lists.empty();
+          $message.empty();
+          $('.pager').remove();
         };
       });
 
