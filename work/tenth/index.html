@@ -186,7 +186,7 @@
           $('.pager').remove();
         };
 
-        // データ描画（検索）
+        // データ描画
         function nestList(info) {
           var nestedLists = "";
           nestedLists +=
@@ -223,12 +223,14 @@
           var $next = $('[data-js="page-next"]');
           if (PAGE_COUNT === 1) {
             $('.btn-item').addClass('disabled');
-          } else if (NOW_PAGE === 1 && PAGE_COUNT >= 2) {
+          } else if (PAGE_COUNT >= 2 && NOW_PAGE === 1) {
             $next.removeClass('disabled');
             $prev.addClass('disabled');
-          } else if (PAGE_COUNT !== 1 && PAGE_COUNT === NOW_PAGE) {
+          } else if (PAGE_COUNT >= 2 && PAGE_COUNT === NOW_PAGE) {
             $prev.removeClass('disabled');
             $next.addClass('disabled');
+          } else {
+            return;
           }
         };
 
