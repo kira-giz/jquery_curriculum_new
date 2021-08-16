@@ -99,6 +99,7 @@
           page: 1
         };
         var PAGE_COUNT = null;
+        var canAjax = true;
 
         // DOM
         var $lists = $('.lists');
@@ -109,6 +110,8 @@
         // --- イベント ---
         // 検索
         $searchBtn.on('click', function() {
+          if(!canAjax) return;
+          canAjax = false;
           var keyword = $('.search__text__input').val();
           if (keyword === "") {
             // 検索ワードなし
@@ -176,7 +179,12 @@
           })
           .fail(function(error) {
             console.log(error);
-          });
+            var multipleRequests = '<p class="error-message">' + 'リクエスト過多です。しばらく時間を置いてからお試しください。' + '</p>';
+            $message.append(multipleRequests);
+          })
+          .always(function(){
+            canAjax = true;
+          })
         };
 
         // DOMリセット
