@@ -150,6 +150,7 @@
           .done(function(data){
             PAGE_COUNT = data.pageCount;
             var booksData = data.Items;
+            var nestedLists = "";
 
             if (booksData.length === 0) {
               // 検索結果0件
@@ -171,12 +172,12 @@
                   publisher : val.Item.publisherName,
                 };
                 // DOM挿入
-                nestList(bookInfo);
+                nestList(nestedLists, bookInfo);
               });
 
               // ページャー挿入
               insertPager();
-            };
+            }
           })
           .fail(function(jqXHR) {
             if(jqXHR.status === 429) {
@@ -202,9 +203,8 @@
         };
 
         // データ描画
-        function nestList(info) {
-          var nestedLists = "";
-          nestedLists +=
+        function nestList(list, info) {
+          list +=
             '<li class="lists__item">' +
               '<div class="lists__item__inner">' +
                 '<a href="' + info.url + '" class="lists__item__link" target="_blank">' +
@@ -215,7 +215,8 @@
                 '</a>' +
               '</div>' +
             '</li>';
-          $lists.append(nestedLists);
+
+          $lists.append(list);
         };
 
         // ページャー（検索）
