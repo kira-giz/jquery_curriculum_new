@@ -174,29 +174,24 @@
           .fail(function(error) {
             switch(error.status) {
               case 0:
-              var ERROR_MESSAGE = '<p class="error-message">' + '通信に失敗しました。インターネットの接続をご確認ください。' + '</p>';
-              $message.append(ERROR_MESSAGE);
+              $message.append('<p class="error-message">' + '通信に失敗しました。インターネットの接続をご確認ください。' + '</p>');
               break;
 
               case 400:
-              var ERROR_MESSAGE = '<p class="error-message">' + '検索文字が入力されていません。' + '</p>';
-              $message.append(ERROR_MESSAGE);
+              $message.append('<p class="error-message">' + '検索文字が入力されていません。' + '</p>');
               break;
 
               case 404:
-              var ERROR_MESSAGE = '<p class="error-message">' + 'お探しのページが見つかりません。' + '</p>';
-              $message.append(ERROR_MESSAGE);
+              $message.append('<p class="error-message">' + 'お探しのページが見つかりません。' + '</p>');
               break;
 
               case 429:
               case 503:
-              var ERROR_MESSAGE = '<p class="error-message">' + 'リクエスト過多です。しばらく時間を置いてからお試しください。' + '</p>';
-              $message.append(ERROR_MESSAGE);
+              $message.append('<p class="error-message">' + 'リクエスト過多です。しばらく時間を置いてからお試しください。' + '</p>');
               break;
 
               case 500:
-              var ERROR_MESSAGE = '<p class="error-message">' + 'システムエラーです。しばらく時間を置いてからお試しください。' + '</p>';
-              $message.append(ERROR_MESSAGE);
+              $message.append('<p class="error-message">' + 'システムエラーです。しばらく時間を置いてからお試しください。' + '</p>');
               break;
 
               default:

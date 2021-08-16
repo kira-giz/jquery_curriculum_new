@@ -9,13 +9,16 @@
 ## 変数
 ### 外部変数
 - rakutenBooks
-  - ajaxのパラメーター
+  - 通信時のパラメーター
 - PAGE_COUNT
   - 総ページ数
   - 外部からのアクセス用
     - bookSearch
     - insertPager
     - paging
+- canAjax
+  - falseの場合何も返さない=通信しない
+  - alwaysで成否に関わらずtrueに戻し再度通信できるような状態にする
 
 ### DOM
 - lists
