@@ -88,7 +88,6 @@
       //   </div>
       // </div>
 
-
       $(function() {
         // --- 変数 ---
         var rakutenBooks = {
@@ -170,16 +169,40 @@
               insertPager();
             }
           })
-          .fail(function(jqXHR) {
-            if(jqXHR.status === 429) {
-              var multipleRequests = '<p class="error-message">' + 'リクエスト過多です。しばらく時間を置いてからお試しください。' + '</p>';
-              $message.append(multipleRequests);
-            } else if (jqXHR.status === 0) {
-              var multipleRequests = '<p class="error-message">' + '通信に失敗しました。インターネットの接続をご確認ください。' + '</p>';
-              $message.append(multipleRequests);
-            } else {
+          .fail(function(error) {
+            switch(error.status) {
+              case 0:
+              var ERROR_MESSAGE = '<p class="error-message">' + '通信に失敗しました。インターネットの接続をご確認ください。' + '</p>';
+              $message.append(ERROR_MESSAGE);
+              break;
+
+              case 400:
               var ERROR_MESSAGE = '<p class="error-message">' + '検索文字が入力されていません。' + '</p>';
               $message.append(ERROR_MESSAGE);
+              break;
+
+              case 404:
+              var ERROR_MESSAGE =
+                '<p>' +
+                  '検索結果が見つかりませんでした。' +
+                  '<br>' +
+                  '別のキーワードで検索して下さい。' +
+                '</p>';
+              break;
+
+              case 429:
+              case 503:
+              var ERROR_MESSAGE = '<p class="error-message">' + 'リクエスト過多です。しばらく時間を置いてからお試しください。' + '</p>';
+              $message.append(ERROR_MESSAGE);
+              break;
+
+              case 500:
+              var ERROR_MESSAGE = '<p class="error-message">' + 'システムエラーです。しばらく時間を置いてからお試しください。' + '</p>';
+              $message.append(ERROR_MESSAGE);
+              break;
+
+              default:
+              console.log(error);
             };
           })
           .always(function(){
@@ -207,7 +230,7 @@
                 '</a>' +
               '</div>' +
             '</li>';
-
+          // 一回のappendですませる
           $lists.append(list);
         };
 
@@ -232,14 +255,10 @@
           if (PAGE_COUNT === 1) {
             $('.btn-item').addClass('disabled');
           } else if (PAGE_COUNT >= 2 && NOW_PAGE === 1) {
-            $next.removeClass('disabled');
             $prev.addClass('disabled');
           } else if (PAGE_COUNT >= 2 && PAGE_COUNT === NOW_PAGE) {
-            $prev.removeClass('disabled');
             $next.addClass('disabled');
-          } else {
-            return;
-          }
+          };
         };
 
         // ページング（ページング）
