@@ -143,25 +143,7 @@
 
             if (PAGE_COUNT === 0) { $message.append('<p>' + '検索結果が見つかりませんでした。' + '<br>' + '別のキーワードで検索して下さい。' + '</p>'); return; }
 
-            // 本の数だけDOM挿入
-            $.each(data.Items, function(index, val) {
-              nestedLists +=
-                '<li class="lists__item">' +
-                  '<div class="lists__item__inner">' +
-                    '<a href="' + val.Item.itemUrl + '" class="lists__item__link" target="_blank">' +
-                      '<img src="' + val.Item.largeImageUrl + '" class="lists__item__img" alt="">' +
-                      '<p class="lists__item__detail">作品名：' + val.Item.title + '</p>' +
-                      '<p class="lists__item__detail">作者　：' + val.Item.author + '</p>' +
-                      '<p class="lists__item__detail">出版社：' + val.Item.publisherName + '</p>' +
-                    '</a>' +
-                  '</div>' +
-                '</li>';
-            });
-
-            // DOM挿入
-            $lists.append(nestedLists);
-            // ページャー挿入
-            insertPager();
+            showBooks(data.Items, nestedLists);
           })
           .fail(function(error) {
             switch(error.status) {
@@ -203,6 +185,28 @@
           $lists.empty();
           $message.empty();
           $('.pager').remove();
+        };
+
+        function showBooks(bookArray, listDom) {
+          // 本の数だけDOM挿入
+            $.each(bookArray, function(index, val) {
+              listDom +=
+                '<li class="lists__item">' +
+                  '<div class="lists__item__inner">' +
+                    '<a href="' + val.Item.itemUrl + '" class="lists__item__link" target="_blank">' +
+                      '<img src="' + val.Item.largeImageUrl + '" class="lists__item__img" alt="">' +
+                      '<p class="lists__item__detail">作品名：' + val.Item.title + '</p>' +
+                      '<p class="lists__item__detail">作者　：' + val.Item.author + '</p>' +
+                      '<p class="lists__item__detail">出版社：' + val.Item.publisherName + '</p>' +
+                    '</a>' +
+                  '</div>' +
+                '</li>';
+            });
+
+            // DOM挿入
+            $lists.append(listDom);
+            // ページャー挿入
+            insertPager();
         };
 
         // ページャー（検索）
