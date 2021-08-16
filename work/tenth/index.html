@@ -114,18 +114,9 @@
           canAjax = false;
 
           rakutenBooks.keyword = $('.search__text__input').val();
+          rakutenBooks.page = 1;
 
-          if (rakutenBooks.keyword === "") {
-            // 検索ワードなし
-            domReset();
-            var ERROR_MESSAGE = '<p class="error-message">' + '検索文字が入力されていません。' + '</p>';
-            $message.append(ERROR_MESSAGE);
-            canAjax = true;
-          } else {
-            // 検索ワードあり
-            rakutenBooks.page = 1;
-            bookSearch(rakutenBooks);
-          }
+          bookSearch(rakutenBooks);
         });
 
         // ページング
@@ -187,7 +178,9 @@
               var multipleRequests = '<p class="error-message">' + '通信に失敗しました。インターネットの接続をご確認ください。' + '</p>';
               $message.append(multipleRequests);
             } else {
-              console.log(jqXHR.status);
+              console.log(jqXHR);
+              var ERROR_MESSAGE = '<p class="error-message">' + '検索文字が入力されていません。' + '</p>';
+              $message.append(ERROR_MESSAGE);
             };
           })
           .always(function(){
