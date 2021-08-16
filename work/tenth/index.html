@@ -112,12 +112,15 @@
         $searchBtn.on('click', function() {
           if(!canAjax) return;
           canAjax = false;
-          var keyword = $('.search__text__input').val();
-          if (keyword === "") {
+
+          rakutenBooks.keyword = $('.search__text__input').val();
+
+          if (rakutenBooks.keyword === "") {
             // 検索ワードなし
             domReset();
             var ERROR_MESSAGE = '<p class="error-message">' + '検索文字が入力されていません。' + '</p>';
             $message.append(ERROR_MESSAGE);
+            canAjax = true;
           } else {
             // 検索ワードあり
             rakutenBooks.page = 1;
@@ -137,8 +140,6 @@
         function bookSearch(params) {
           // DOMのリセット
           domReset();
-          // 検索ワード
-          params.keyword = $('.search__text__input').val();
 
           $.ajax({
             url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
@@ -177,22 +178,20 @@
               insertPager();
             };
           })
-          .fail(function(jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR); // HTTPステータスが取得
-            console.log("jqXHR          : " + jqXHR.status); // HTTPステータスが取得
-            console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラー
-            console.log("errorThrown    : " + errorThrown.message); // 例外情報
+          .fail(function(jqXHR) {
             if(jqXHR.status === 429) {
               var multipleRequests = '<p class="error-message">' + 'リクエスト過多です。しばらく時間を置いてからお試しください。' + '</p>';
               $message.append(multipleRequests);
             } else if (jqXHR.status === 0) {
               var multipleRequests = '<p class="error-message">' + '通信に失敗しました。インターネットの接続をご確認ください。' + '</p>';
               $message.append(multipleRequests);
-            }
+            } else {
+              console.log(jqXHR.status);
+            };
           })
           .always(function(){
             canAjax = true;
-          })
+          });
         };
 
         // DOMリセット
@@ -263,6 +262,7 @@
               return;
             } else {
               rakutenBooks.page--;
+              $(window).scrollTop(20);
               bookSearch(rakutenBooks);
             };
             break;
@@ -272,6 +272,7 @@
               return;
             } else {
               rakutenBooks.page++;
+              $(window).scrollTop(20);
               bookSearch(rakutenBooks);
             };
             break;
