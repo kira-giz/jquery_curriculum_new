@@ -146,7 +146,47 @@
             showBooks(data.Items, nestedLists);
           })
           .fail(function(error) {
-            switch(error.status) {
+            errorMessageInsert(error.status);
+          })
+          .always(function(){
+            canAjax = true;
+          });
+        };
+
+        // DOMリセット
+        function domReset() {
+          $lists.empty();
+          $message.empty();
+          $('.pager').remove();
+        };
+
+        // 本情報の挿入
+        function showBooks(bookArray, listDom) {
+
+          // 本の数だけDOM挿入
+            $.each(bookArray, function(index, val) {
+              listDom +=
+                '<li class="lists__item">' +
+                  '<div class="lists__item__inner">' +
+                    '<a href="' + val.Item.itemUrl + '" class="lists__item__link" target="_blank">' +
+                      '<img src="' + val.Item.largeImageUrl + '" class="lists__item__img" alt="">' +
+                      '<p class="lists__item__detail">作品名：' + val.Item.title + '</p>' +
+                      '<p class="lists__item__detail">作者　：' + val.Item.author + '</p>' +
+                      '<p class="lists__item__detail">出版社：' + val.Item.publisherName + '</p>' +
+                    '</a>' +
+                  '</div>' +
+                '</li>';
+            });
+
+            // DOM挿入
+            $lists.append(listDom);
+            // ページャー挿入
+            insertPager();
+        };
+
+        // エラーログの挿入
+        function errorMessageInsert(errorStatus) {
+          switch(errorStatus) {
               case 0:
               $message.append('<p class="error-message">' + '通信に失敗しました。インターネットの接続をご確認ください。' + '</p>');
               break;
@@ -170,45 +210,8 @@
               case 503:
               $message.append('<p class="error-message">' + 'メンテナンス中です。しばらくお待ちください。' + '</p>');
               break;
-
-              default:
-              console.log(error);
             };
-          })
-          .always(function(){
-            canAjax = true;
-          });
-        };
-
-        // DOMリセット
-        function domReset() {
-          $lists.empty();
-          $message.empty();
-          $('.pager').remove();
-        };
-
-        function showBooks(bookArray, listDom) {
-          // 本の数だけDOM挿入
-            $.each(bookArray, function(index, val) {
-              listDom +=
-                '<li class="lists__item">' +
-                  '<div class="lists__item__inner">' +
-                    '<a href="' + val.Item.itemUrl + '" class="lists__item__link" target="_blank">' +
-                      '<img src="' + val.Item.largeImageUrl + '" class="lists__item__img" alt="">' +
-                      '<p class="lists__item__detail">作品名：' + val.Item.title + '</p>' +
-                      '<p class="lists__item__detail">作者　：' + val.Item.author + '</p>' +
-                      '<p class="lists__item__detail">出版社：' + val.Item.publisherName + '</p>' +
-                    '</a>' +
-                  '</div>' +
-                '</li>';
-            });
-
-            // DOM挿入
-            $lists.append(listDom);
-            // ページャー挿入
-            insertPager();
-        };
-
+        }
         // ページャー（検索）
         function insertPager() {
           var NOW_PAGE = rakutenBooks.page;
@@ -238,21 +241,15 @@
 
           switch (targetData) {
             case 'page-prev':
-            if (NOW_PAGE === 1) {
-              return;
-            } else {
-              rakutenBooks.page--;
-              bookSearch(rakutenBooks);
-            };
+            if (NOW_PAGE === 1) return;
+            rakutenBooks.page--;
+            bookSearch(rakutenBooks);
             break;
 
             case 'page-next':
-            if (NOW_PAGE === 100 || NOW_PAGE === PAGE_COUNT) {
-              return;
-            } else {
-              rakutenBooks.page++;
-              bookSearch(rakutenBooks);
-            };
+            if (NOW_PAGE === 100 || NOW_PAGE === PAGE_COUNT) return;
+            rakutenBooks.page++;
+            bookSearch(rakutenBooks);
             break;
           };
         };
