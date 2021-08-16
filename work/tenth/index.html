@@ -177,10 +177,18 @@
               insertPager();
             };
           })
-          .fail(function(error) {
-            console.log(error);
-            var multipleRequests = '<p class="error-message">' + 'リクエスト過多です。しばらく時間を置いてからお試しください。' + '</p>';
-            $message.append(multipleRequests);
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR); // HTTPステータスが取得
+            console.log("jqXHR          : " + jqXHR.status); // HTTPステータスが取得
+            console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラー
+            console.log("errorThrown    : " + errorThrown.message); // 例外情報
+            if(jqXHR.status === 429) {
+              var multipleRequests = '<p class="error-message">' + 'リクエスト過多です。しばらく時間を置いてからお試しください。' + '</p>';
+              $message.append(multipleRequests);
+            } else if (jqXHR.status === 0) {
+              var multipleRequests = '<p class="error-message">' + '通信に失敗しました。インターネットの接続をご確認ください。' + '</p>';
+              $message.append(multipleRequests);
+            }
           })
           .always(function(){
             canAjax = true;
