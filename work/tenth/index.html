@@ -139,11 +139,9 @@
           })
           .done(function(data){
             PAGE_COUNT = data.pageCount;
-            var booksData = data.Items;
             var nestedLists = "";
 
-            if (booksData.length === 0) {
-              // 検索結果0件
+            if (PAGE_COUNT === 0) {
               var SEARCH_ZERO =
                 '<p>' +
                   '検索結果が見つかりませんでした。' +
@@ -152,22 +150,26 @@
                 '</p>';
               $message.append(SEARCH_ZERO);
             } else {
-              // 検索結果1以上
-              $.each(booksData, function(index, val) {
-                var bookInfo = {
-                  url : val.Item.itemUrl,
-                  img : val.Item.largeImageUrl,
-                  title : val.Item.title,
-                  author : val.Item.author,
-                  publisher : val.Item.publisherName,
-                };
-                // DOM挿入
-                nestList(nestedLists, bookInfo);
+              // 本の数だけDOM挿入
+              $.each(data.Items, function(index, val) {
+                nestedLists +=
+                  '<li class="lists__item">' +
+                    '<div class="lists__item__inner">' +
+                      '<a href="' + val.Item.itemUrl + '" class="lists__item__link" target="_blank">' +
+                        '<img src="' + val.Item.largeImageUrl + '" class="lists__item__img" alt="">' +
+                        '<p class="lists__item__detail">作品名：' + val.Item.title + '</p>' +
+                        '<p class="lists__item__detail">作者　：' + val.Item.author + '</p>' +
+                        '<p class="lists__item__detail">出版社：' + val.Item.publisherName + '</p>' +
+                      '</a>' +
+                    '</div>' +
+                  '</li>';
               });
 
+              // DOM挿入
+              $lists.append(nestedLists);
               // ページャー挿入
               insertPager();
-            }
+            };
           })
           .fail(function(error) {
             switch(error.status) {
@@ -182,12 +184,8 @@
               break;
 
               case 404:
-              var ERROR_MESSAGE =
-                '<p>' +
-                  '検索結果が見つかりませんでした。' +
-                  '<br>' +
-                  '別のキーワードで検索して下さい。' +
-                '</p>';
+              var ERROR_MESSAGE = '<p class="error-message">' + 'お探しのページが見つかりません。' + '</p>';
+              $message.append(ERROR_MESSAGE);
               break;
 
               case 429:
@@ -217,23 +215,6 @@
           $('.pager').remove();
         };
 
-        // データ描画
-        function nestList(list, info) {
-          list +=
-            '<li class="lists__item">' +
-              '<div class="lists__item__inner">' +
-                '<a href="' + info.url + '" class="lists__item__link" target="_blank">' +
-                  '<img src="' + info.img + '" class="lists__item__img" alt="">' +
-                  '<p class="lists__item__detail">作品名：' + info.title + '</p>' +
-                  '<p class="lists__item__detail">作者　：' + info.author + '</p>' +
-                  '<p class="lists__item__detail">出版社：' + info.publisher + '</p>' +
-                '</a>' +
-              '</div>' +
-            '</li>';
-          // 一回のappendですませる
-          $lists.append(list);
-        };
-
         // ページャー（検索）
         function insertPager() {
           var NOW_PAGE = rakutenBooks.page;
@@ -250,15 +231,8 @@
             '</div>';
           $lists.after(pager);
 
-          var $prev = $('[data-js="page-prev"]');
-          var $next = $('[data-js="page-next"]');
-          if (PAGE_COUNT === 1) {
-            $('.btn-item').addClass('disabled');
-          } else if (PAGE_COUNT >= 2 && NOW_PAGE === 1) {
-            $prev.addClass('disabled');
-          } else if (PAGE_COUNT >= 2 && PAGE_COUNT === NOW_PAGE) {
-            $next.addClass('disabled');
-          };
+          if (NOW_PAGE === 1) $('[data-js="page-prev"]').addClass('disabled');
+          if (PAGE_COUNT === NOW_PAGE) $('[data-js="page-next"]').addClass('disabled');
         };
 
         // ページング（ページング）
