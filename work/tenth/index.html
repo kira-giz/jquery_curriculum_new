@@ -142,13 +142,8 @@
             var nestedLists = "";
 
             if (PAGE_COUNT === 0) {
-              var SEARCH_ZERO =
-                '<p>' +
-                  '検索結果が見つかりませんでした。' +
-                  '<br>' +
-                  '別のキーワードで検索して下さい。' +
-                '</p>';
-              $message.append(SEARCH_ZERO);
+              // 検索結果0
+              $message.append('<p>' + '検索結果が見つかりませんでした。' + '<br>' + '別のキーワードで検索して下さい。' + '</p>');
             } else {
               // 本の数だけDOM挿入
               $.each(data.Items, function(index, val) {
